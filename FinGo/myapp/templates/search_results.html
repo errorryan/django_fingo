@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products</title>
+  <style>
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+
+
+    
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center">All Products</h1>
+
+    <!-- 🔍 Search Bar -->
+    <form method="GET" action="{% url 'view_products' %}" class="max-w-md mx-auto mb-8">
+      <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+        <input 
+          type="text" 
+          name="q" 
+          placeholder="Search products..." 
+          value="{{ request.GET.q }}" 
+          class="w-full px-4 py-2 focus:outline-none" 
+          required>
+        <button 
+          type="submit" 
+          class="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition">
+          Search
+        </button>
+      </div>
+    </form>
+
+    {% if query %}
+      <h2 class="text-xl font-semibold mb-4 text-center">Search Results for "{{ query }}"</h2>
+    {% endif %}
+
+    <!-- 🛒 Product Grid -->
+    <div class="product-grid">
+      {% for product in products %}
+      <a href="{% url 'product_detail' product.id %}" class="product-card block">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.productName }}">
+        {% else %}
+          <img src="https://via.placeholder.com/250x180.png?text=No+Image" alt="No Image">
+        {% endif %}
+        <h3 class="text-lg font-semibold mt-2">{{ product.productName }}</h3>
+        <p class="text-gray-600 text-sm">{{ product.description|truncatewords:15 }}</p>
+        <p class="text-blue-600 font-bold mt-2">₱{{ product.price }}</p>
+        <p class="text-gray-500 text-sm">Stock: {{ product.stock }}</p>
+        <p class="text-gray-400 text-xs">Added: {{ product.created_at|date:"F j, Y" }}</p>
+      </a>
+      {% empty %}
+      <p class="text-center text-gray-600 col-span-full">No products found.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Completed Orders</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+
+  <h1>✅ Completed Orders</h1>
+  <a href="{% url 'manage_orders' %}">← Back to Manage Orders</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in Delivered_orders %}
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.user.username }}</td>
+        <td>{{ order.product.productName }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>₱{{ order.total_price }}</td>
+        <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" style="text-align:center;">No completed orders yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>
