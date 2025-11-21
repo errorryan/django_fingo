@@ -1,5 +1,3 @@
-
-
 import os
 from pathlib import Path
 
@@ -8,16 +6,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
 SECRET_KEY = 'django-insecure-^1^tr2h2_oe@v005h*2*x8&!o!60k7rtb7rpbq(!mv-l=f)@ur'
+
 DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'e-commerce-django-xbxh.onrender.com']
+
+
 
 
 # 0ec5238884d3a3d57e46751560b34b58 SECRET_KEY
 # MEDIA & STATIC
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Required for collectstatic on PythonAnywhere
 
 # APPLICATIONS
 INSTALLED_APPS = [
@@ -33,10 +36,10 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # important
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # important
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -54,6 +57,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  # optional if you use MEDIA_URL in templates
             ],
         },
     },
@@ -61,18 +65,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FinGo.wsgi.application'
 
-# DATABASE (MySQL)
+# DATABASE (MySQL on PythonAnywhere)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fingo_db',
-        'USER': 'root',
-        'PASSWORD': 'ryanfallore',
-        'HOST': '127.0.0.1',
+        'NAME': 'fallore$fingodb',
+        'USER': 'fallore',
+        'PASSWORD': 'compterscience',
+        'HOST': 'fallore.mysql.pythonanywhere-services.com',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
 }
@@ -100,10 +104,10 @@ LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # SESSION CONFIGURATION (persistent sessions)
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # store sessions in DB
-SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Sessions persist after browser close
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = False  # True in production with HTTPS
 SESSION_COOKIE_HTTPONLY = True
-SESSION_SAVE_EVERY_REQUEST = True  # Changed to True for better session persistence
-CSRF_COOKIE_SECURE = False  # Add this for development
+SESSION_SAVE_EVERY_REQUEST = True
+CSRF_COOKIE_SECURE = False  # True in production with HTTPS
