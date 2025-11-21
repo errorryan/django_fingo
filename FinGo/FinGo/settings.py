@@ -63,10 +63,10 @@ WSGI_APPLICATION = 'FinGo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fingo_db',
-        'USER': 'root',
-        'PASSWORD': 'ryanfallore',
-        'HOST': '127.0.0.1',
+        'NAME': 'fallore$fingodb',
+        'USER': 'fallore',
+        'PASSWORD': 'compterscience',
+        'HOST': 'fallore.mysql.pythonanywhere-services.com',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
