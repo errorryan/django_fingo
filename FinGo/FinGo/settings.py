@@ -8,8 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^1^tr2h2_oe@v005h*2*x8&!o!60k7rtb7rpbq(!mv-l=f)@ur'
 
 DEBUG = True
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'e-commerce-django-xbxh.onrender.com']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'e-commerce-django-xbxh.onrender.com']
+
 
 
 
@@ -66,20 +66,31 @@ TEMPLATES = [
 WSGI_APPLICATION = 'FinGo.wsgi.application'
 
 # DATABASE (MySQL on PythonAnywhere)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'fallore$fingodb',
+#         'USER': 'fingo_db_user',
+#         'PASSWORD': 'compterscience',
+#         'HOST': 'fallore.mysql.pythonanywhere-services.com',
+#         'PORT': '5432',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fallore$fingodb',
-        'USER': 'fallore',
-        'PASSWORD': 'compterscience',
-        'HOST': 'fallore.mysql.pythonanywhere-services.com',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'fingo_db',
+        'USER': 'fingo_db_user',
+        'PASSWORD': '9ibjLUHm8DKPz4AlkhpiwenkhLkjUFFE',
+        'HOST': 'dpg-d4fu0t2dbo4c739r0e8g-a.singapore-postgres.render.com',
+        'PORT': '5432',
     }
 }
+
 
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
