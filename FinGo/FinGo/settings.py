@@ -11,6 +11,7 @@ SECRET_KEY = 'django-insecure-^1^tr2h2_oe@v005h*2*x8&!o!60k7rtb7rpbq(!mv-l=f)@ur
 DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'e-commerce-django-xbxh.onrender.com']
 
+
 # 0ec5238884d3a3d57e46751560b34b58 SECRET_KEY
 # MEDIA & STATIC
 MEDIA_URL = '/media/'
