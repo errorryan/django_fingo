@@ -80,6 +80,7 @@ urlpatterns = [
     path('user_notifications/', views.user_notifications, name='user_notifications'),
     path('admin_notifications/', views.admin_notifications, name='admin_notifications'),
     path('admin/order/<int:order_id>/', views.admin_order_detail, name='admin_order_detail'),
+    path('create-admin/', views.create_admin, name='create_admin'),
 
 
 ]
