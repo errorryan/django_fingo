@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | FinGo</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- 🌊 Ocean Waves Background -->
+  <div class="ocean">
+    <div class="wave"></div>
+  </div>
+
+  <!-- Sidebar + Main Content -->
+  <div class="flex h-screen">
+
+    <!-- Sidebar -->
+    <aside>
+      <div class="logo">FinGo Admin</div>
+      <nav>
+        <a href="{% url 'admin_dashboard' %}" class="active">Dashboard</a>
+        <a href="{% url 'manage_products' %}">Manage Products</a>
+        <a href="{% url 'manage_orders' %}">Manage Orders</a>
+        <a href="{% url 'manage_users' %}">Manage Users</a>
+        <a href="{% url 'admin_notifications' %}">Notifications</a>
+      </nav>
+      <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Header -->
+      <div class="main-header">
+        <h1>Admin Dashboard</h1>
+        <div class="welcome">Welcome, {{ request.user.username }}</div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="grid">
+        <div class="card">
+          <h2>Total Products</h2>
+          <p>{{ total_products }}</p>
+        </div>
+        <div class="card">
+          <h2>Total Orders</h2>
+          <p>{{ total_orders }}</p>
+        </div>
+        <div class="card">
+          <h2>Total Users</h2>
+          <p>{{ total_users }}</p>
+        </div>
+        <div class="card">
+          <h2>Total Income</h2>
+          <p>₱{{ total_income }}</p>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="table-container">
+        <h2>Recent Orders</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in recent_orders %}
+            <tr>
+              <td>{{ order.id }}</td>
+              <td>{{ order.user.username }}</td>
+              <td>₱{{ order.total_price }}</td>
+              <td>
+                <span class="status {% if order.status == 'Completed' %}completed{% elif order.status == 'Pending' %}pending{% else %}cancelled{% endif %}">
+                  {{ order.status }}
+                </span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4" class="no-orders">No recent orders</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Top-Selling Products Table -->
+      <div class="table-container" style="margin-top:30px;">
+        <h2>Top-Selling Products</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Quantity Sold (kg)</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in top_products %}
+            <tr>
+              <td>{{ product.product__productName }}</td>
+              <td>{{ product.total_quantity_sold }}</td>
+              <td>₱{{ product.total_revenue }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="no-products">No sales yet</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

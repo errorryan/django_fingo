@@ -19,18 +19,6 @@ from django.contrib import messages
 from django.db.models import Sum
 from django.contrib.auth import authenticate, login
 
-def create_admin(request):
-    # Check if superuser already exists
-    if User.objects.filter(is_superuser=True).exists():
-        return HttpResponse("Superuser already exists.")
-
-    # Create superuser
-    User.objects.create_superuser(
-        username='admin',        # change as needed
-        email='falloreryan649@gmail.com',  # change as needed
-        password='computerscience123'    # change as needed
-    )
-    return HttpResponse("Superuser created successfully!")
 
 # ✅ Utility: check if user is admin
 def is_admin(user):

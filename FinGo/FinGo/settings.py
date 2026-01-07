@@ -69,21 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FinGo.wsgi.application'
 
-# DATABASE (MySQL on PythonAnywhere)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'fallore$fingodb',
-#         'USER': 'fingo_db_user',
-#         'PASSWORD': 'compterscience',
-#         'HOST': 'fallore.mysql.pythonanywhere-services.com',
-#         'PORT': '5432',
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         },
-#     }
-# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -92,6 +78,9 @@ DATABASES = {
         'PASSWORD': '9ibjLUHm8DKPz4AlkhpiwenkhLkjUFFE',
         'HOST': 'dpg-d4fu0t2dbo4c739r0e8g-a.singapore-postgres.render.com',
         'PORT': '5432',
+           'OPTIONS': {
+            'sslmode': 'require'  # <- THIS LINE IS CRUCIAL
+        }
     }
 }
 
