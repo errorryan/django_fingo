@@ -1,0 +1,301 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinGo | Fresh Fish Marketplace</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+  <!-- Static CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    .about-content video {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      object-fit: cover;
+    }
+
+    /* Search Bar */
+    .search-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-container input {
+      background-color: #fff;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 10px 15px;
+      font-size: 14px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+    .search-container input:focus {
+      border-color: #00b4d8;
+      box-shadow: 0 0 8px rgba(0, 180, 216, 0.6);
+    }
+    .search-container button {
+      background-color: #00b4d8;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .search-container button:hover {
+      background-color: orange;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <a href="{% url 'user_dashboard' %}">
+      <img src="{% static 'img/logo.png' %}" alt="FinGo Logo">
+    </a>
+    <p class="tagline">Catch It Fresh, Get It Fast, Fin-tastic Fish!</p>
+  </div>
+
+  <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="header-drawer" id="headerDrawer">
+    <div class="drawer-heading">
+      
+    </div>
+    <nav class="nav" id="primary-nav">
+      <a href="{% url 'user_dashboard' %}">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="#products">Shop</a>
+      <a href="{% url 'cart' %}">Cart</a>
+      <a href="{% url 'favorites_list' %}">Favorites</a>
+    </nav>
+
+    <form class="search-container" method="GET" action="{% url 'view_products' %}">
+      <input type="text" name="q" placeholder="Search fish..." required>
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <div class="profile-dropdown">
+    <button class="profile-btn">
+      <div class="avatar">
+        {% if request.user.is_authenticated %}
+          {% if request.user.userprofile.avatar %}
+            <img src="{{ request.user.userprofile.avatar.url }}" alt="User Avatar">
+          {% else %}
+            <img src="{% static 'img/default-avatar.png' %}" alt="Default Avatar">
+          {% endif %}
+        {% else %}
+          <img src="{% static 'img/guest-avatar.png' %}" alt="Guest Avatar">
+        {% endif %}
+      </div>
+      <span class="username">
+        {% if request.user.is_authenticated %}
+          {{ request.user.username }}
+        {% else %}
+          Guest
+        {% endif %}
+      </span>
+      <span class="arrow-down"></span>
+    </button>
+
+    {% if request.user.is_authenticated %}
+    <div class="dropdown-menu">
+      <a href="{% url 'profile' %}">My Profile</a>
+      <a href="{% url 'my_orders' %}">My Orders</a>
+      <a href="{% url 'user_notifications' %}">My Notifications</a>
+      <a href="{% url 'logout' %}" class="logout"
+         onclick="return confirm('Are you sure you want to log out?');">Logout</a>
+    </div>
+    {% endif %}
+  </div>
+</header>
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+<!-- HERO SECTION -->
+<section id="user_dashboard" class="carousel">
+  <div class="carousel-inner">
+    <div class="slide">
+      <img src="{% static 'img/carousel-1.jpg' %}" alt="Fresh Fish">
+      <div class="caption">
+        <h1>Fresh from the Ocean, Straight to Your Table</h1>
+        <p>Enjoy premium seafood delivered daily.</p>
+        <a href="{% url 'view_products' %}" class="btn">Shop Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS SECTION -->
+<section id="products" class="products">
+  <h1>Our Fresh Catch</h1>
+ 
+  <div class="product-grid">
+    {% for product in products|slice:":5" %}
+    <div class="product-card">
+
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.productName }}">
+      {% else %}
+        <img src="https://via.placeholder.com/250x180.png?text=No+Image" alt="No Image">
+      {% endif %}
+
+      <h3>{{ product.productName }}</h3>
+      <p>{{ product.description }}</p>
+      <p pclass="price">Price per kilo: ₱{{ product.price }}</p>
+      <p>kilo available: {{ product.stock }}</p>
+
+      <!-- Order Form -->
+      <form action="{% url 'place_order' product.id %}" method="POST" onsubmit="return confirmOrder(this)">
+        {% csrf_token %}
+        <input type="number" name="quantity" min="0.25" max="{{ product.stock }}" step="0.25" value="1"
+               class="quantity-input" required>
+           <div class="payment-method" style="margin-top:8px;">
+      <label>
+        <input type="radio" name="payment_method" value="COD" required> Cash on Delivery
+      </label>
+     
+    </div>
+        <button type="submit" class="btn-order">Order</button>
+      </form>
+
+      <!-- Favorites Buttons -->
+      <div class="favorites-buttons" style="margin-top: 10px; display: flex; gap: 10px;">
+        <a href="{% url 'add_to_favorites' product.id %}" class="btn btn-warning">❤️ Add to Favorites</a>
+       
+      </div>
+<!-- CART ENHANCEMENTS -->
+<div class="cart-buttons" style="margin-top:10px; display:flex; gap:10px;">
+    <!-- Add to Cart -->
+    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">
+        🛒 Add to Cart
+    </a>
+
+    <!-- Save for Later (only for logged-in users) -->
+    {% if request.user.is_authenticated %}
+
+    </a>
+    {% endif %}
+</div>
+
+    </div>
+    {% empty %}
+      <p class="no-products">No products available.</p>
+    {% endfor %}
+  </div>
+
+  {% if products|length > 5 %}
+    <div class="view-more">
+      <a href="{% url 'view_products' %}?show_all=true" class="btn-view-more">View More ⬇️</a>
+    </div>
+  {% endif %}
+</section>
+
+
+
+
+
+
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="about-content">
+    <img src="{% static 'img/posters.png' %}" alt="Seafood Poster" class="poster">
+    <video controls muted loop>
+      <source src="{% static 'videos/ads.mp4' %}" type="video/mp4">
+    </video>
+    <div>
+      <h2>About FinGo Seafood</h2>
+      <p>Bringing the ocean’s freshness straight to your home.</p>
+      <p>We partner with local fishermen to deliver sustainable seafood daily.</p>
+      <a href="{% url 'view_products' %}" class="btn">Shop Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <h2>Our Services</h2>
+  <div class="service-grid">
+    <div class="service-card">
+      <i class="fas fa-fish"></i>
+      <h4>Fresh & Sustainable</h4>
+      <p>Directly from local fishermen to your plate.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-truck"></i>
+      <h4>Fast Delivery</h4>
+      <p>Guaranteed fresh, delivered right to your door.</p>
+    </div>
+    <div class="service-card">
+      <i class="fas fa-headset"></i>
+      <h4>Support 6 AM – 6 PM</h4>
+      <p>Need help? Our friendly team is ready to assist you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <h2>Contact Us</h2>
+  <p>📍 Capoocan, Leyte, Philippines</p>
+  <p>☎️ +63 910 9752 961</p>
+  <p>📧 fingo@gmail.com</p>
+  <p>🕒 Mon–Sat, 6:00 AM – 6:00 PM</p>
+  <p>If you have questions, feel free to 
+    <a href="mailto:falloreryan649@gmail.com">contact us</a>.
+  </p>
+</section>
+
+<script>
+function confirmOrder(form) {
+  const quantity = form.querySelector('input[name="quantity"]').value;
+  return confirm(`Order ${quantity} item(s)?`);
+}
+
+const menuToggle = document.querySelector('.menu-toggle');
+const drawer = document.querySelector('#headerDrawer');
+const closeBtn = document.querySelector('.drawer-close');
+const backdrop = document.querySelector('#drawerBackdrop');
+
+function toggleDrawer(forceState) {
+  const isOpen = typeof forceState === 'boolean' ? forceState : !drawer.classList.contains('is-open');
+  drawer.classList.toggle('is-open', isOpen);
+  backdrop.classList.toggle('is-visible', isOpen);
+  menuToggle.setAttribute('aria-expanded', isOpen.toString());
+  document.body.classList.toggle('no-scroll', isOpen);
+}
+
+if (menuToggle && drawer) {
+  menuToggle.addEventListener('click', () => toggleDrawer());
+}
+
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => toggleDrawer(false));
+}
+
+if (backdrop) {
+  backdrop.addEventListener('click', () => toggleDrawer(false));
+}
+</script>
+</body>
+</html>

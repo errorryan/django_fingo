@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Product</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
+    <h1 class="text-3xl font-bold text-center mb-8 text-blue-700">Update Product</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-5">
+      {% csrf_token %}
+
+      <!-- Image -->
+      <div>
+        <label class="block font-semibold text-gray-700 mb-1">Product Image</label>
+        {{ form.image }}
+      </div>
+
+      <!-- Product Name -->
+      <div>
+        <label class="block font-semibold text-gray-700 mb-1">Product Name</label>
+        {{ form.productName }}
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block font-semibold text-gray-700 mb-1">Description</label>
+        {{ form.description }}
+      </div>
+
+      <!-- Price -->
+      <div>
+        <label class="block font-semibold text-gray-700 mb-1">Price (₱)</label>
+        {{ form.price }}
+      </div>
+
+      <!-- Stock -->
+      <div>
+        <label class="block font-semibold text-gray-700 mb-1">Stock</label>
+        {{ form.stock }}
+      </div>
+
+      <!-- Created At -->
+      <div>
+        <label class="block font-semibold text-gray-700 mb-1">Created At</label>
+        {{ form.created_at }}
+      </div>
+
+      <!-- Submit -->
+      <div class="pt-4">
+        <button type="submit" 
+          class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition">
+          Update Product
+        </button>
+      </div>
+    </form>
+
+    <div class="text-center mt-6">
+      <a href="{% url 'view_products' %}" 
+        class="inline-block text-blue-600 hover:text-blue-800 font-semibold transition">
+        ← Back to Product List
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

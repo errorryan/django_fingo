@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* 🌍 Body */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #003366; /* Deep ocean blue */
+  color: #1abfe0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  position: relative;
+  padding-top: 40px;
+}
+
+/* 🌊 Ocean Wave Animation */
+.ocean {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 25%;
+  background: #e16e1b;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://i.imgur.com/4NJl5bM.png') repeat-x;
+  background-size: 50% 100%;
+  animation: waveMove 10s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes waveMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 💾 Table Card */
+.manage-orders {
+  height: 50% ;
+  width: 90%;
+  max-width: 1200px;
+  background-color:0 0 25px rgba(0, 180, 216, 0.8);
+  border: 1px solid #e7630b;
+  border-radius: 12px;
+  padding: 30px 20px;
+  box-shadow: 0 0 15px rgb(243, 72, 10);
+  z-index: 1;
+  transition: 0.3s ease-in-out;
+}
+
+.manage-orders:hover {
+  box-shadow: 0 0 25px rgba(0, 180, 216, 0.8);
+}
+
+/* 🔤 Title */
+.manage-orders h1 {
+  color: #00b4d8;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* 🗃 Orders Table */
+.orders-table {
+  width: 100%;
+  height: 50%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,180,216,0.4);
+}
+
+.orders-table th {
+  background-color: #00b4d8;
+  color: #000;
+  padding: 12px 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.orders-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #00b4d8;
+  text-align: center;
+  color: #000;
+  font-weight: 500;
+}
+
+/* 🔖 Status Labels */
+.status {
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.status.Pending { background: #ffedcc; color: #d97706; }
+.status.Processing { background: #cce5ff; color: #0056b3; }
+.status.Delivered { background: #d4edda; color: #155724; }
+.status.Cancelled { background: #f8d7da; color: #721c24; }
+
+/* 🔘 Action Buttons */
+button, a.btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+button:hover, a.btn:hover {
+  opacity: 0.8;
+}
+
+.btn-edit {
+  background-color: #00b4d8;
+  color: #fff;
+}
+
+.btn-delete {
+  background-color: #e63946;
+  color: #fff;
+}
+
+select {
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-weight: 600;
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+select:focus {
+  outline: none;
+  border-color: #00b4d8;
+  box-shadow: 0 0 8px rgba(0,180,216,0.6);
+}
+</style>
+
+</head>
+<body>
+  <div class="ocean">
+    <div class="wave"></div>
+  </div>
+  <div class="manage-orders">
+    <h1>Manage Orders</h1>
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Address</th> <!-- ✅ Added -->
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+          <th>Completed</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>{{ order.user }}</td>
+
+          <!-- ✅ Display user's address from their profile -->
+          <td>
+            {% if order.user.userprofile.address %}
+              {{ order.user.userprofile.address }}
+            {% else %}
+              <em>No address provided</em>
+            {% endif %}
+          </td>
+
+          <td>{{ order.product.productName }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>₱{{ order.total_price }}</td>
+          <td><span class="status {{ order.status }}">{{ order.status }}</span></td>
+          <td>{{ order.created_at|date:"M d, Y h:i A" }}</td>
+          <td class="action-btns">
+            <form method="POST" action="{% url 'update_order_status' order.id %}">
+              {% csrf_token %}
+              <select name="status">
+                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+              </select>
+              <button type="submit" class="btn-edit">Update</button>
+            </form>
+
+            <form method="POST" action="{% url 'delete_order' order.id %}" onsubmit="return confirm('Delete this order?');">
+              {% csrf_token %}
+              <button type="submit" class="btn-delete">Delete</button>
+            </form>
+          </td>
+
+
+          
+     <td>
+      {% if order.status != "Completed" %}
+        <form action="{% url 'update_order_status' order.id %}" method="POST" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="Completed">
+          <button type="submit" class="btn-edit">Mark as Completed ✅</button>
+        </form>
+      {% else %}
+        <span style="color: green; font-weight: 600;">Completed</span>
+      {% endif %}
+    </td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="10" style="text-align:center;">No orders found.</td>
+  </tr>
+  {% endfor %}
+</tbody>
+    </table>
+  </div>
+
+</body>
+</html>

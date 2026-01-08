@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+<style>
+/* 🌊 Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* 🌍 Base Layout */
+body {
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #003366; /* Deep ocean blue */
+  color: #1abfe0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 🌊 Ocean Wave Animation */
+.ocean {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 25%;
+  background: #e16e1b;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://i.imgur.com/4NJl5bM.png') repeat-x;
+  background-size: 50% 100%;
+  animation: waveMove 10s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes waveMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 💾 Registration Card */
+.card {
+  position: relative;
+  z-index: 1;
+  background-color: rgba(20, 20, 20, 0.92);
+  border: 1px solid #e7630b;
+  border-radius: 15px;
+  padding: 40px 35px;
+  box-shadow: 0 0 20px rgba(243, 72, 10, 0.8);
+  transition: 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 0 30px rgba(0, 180, 216, 0.8);
+}
+
+/* 🧾 Form Title */
+.card h3 {
+  color: #00b4d8;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* 🧍 Input Fields */
+.form-label {
+  color: #90e0ef;
+  font-weight: 500;
+}
+
+.form-control {
+  background-color: #000;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 6px;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  background-color: #fff;
+  border-color: #00b4d8;
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.6);
+  color: #000;
+}
+
+/* 🔘 Register Button */
+.btn-primary {
+  background-color: #00b4d8;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0096c7;
+  box-shadow: 0 0 15px rgba(0, 180, 216, 0.8);
+}
+
+/* 🔗 Link Styling */
+a {
+  color: #48cae4;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #90e0ef;
+  text-decoration: underline;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .card {
+    padding: 25px 20px;
+  }
+
+  .form-control {
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+}
+</style>
+<div class="ocean">
+  <div class="wave"></div>
+</div>
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h3 class="mb-4 text-center text-primary">Registration Form</h3>
+
+          <!-- Display error messages -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- Display form errors -->
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              <strong>Please correct the following errors:</strong>
+              <ul class="mb-0">
+                {% for field in form %}
+                  {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="form-control" 
+                       value="{{ form.first_name.value|default:'' }}" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="form-control"
+                       value="{{ form.last_name.value|default:'' }}" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="birthdate" class="form-label">Birthdate</label>
+              <input type="date" name="birthdate" id="birthdate" class="form-control"
+                     value="{{ form.birthdate.value|default:'' }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <input type="text" name="address" id="address" class="form-control"
+                     value="{{ form.address.value|default:'' }}">
+            </div>
+
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" name="username" id="username" class="form-control"
+                     value="{{ form.username.value|default:'' }}" required>
+              {% if form.username.errors %}
+                <div class="text-danger small">{{ form.username.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" name="email" id="email" class="form-control"
+                     value="{{ form.email.value|default:'' }}" required>
+              {% if form.email.errors %}
+                <div class="text-danger small">{{ form.email.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="mb-3">
+              <label for="contact_no" class="form-label">Phone Number</label>
+              <input type="tel" name="contact_no" id="contact_no" 
+                     class="form-control" value="{{ form.contact_no.value|default:'' }}">
+            </div>
+
+            <!-- CHANGED: Use password1 and password2 instead of password and confirm_password -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="password1" class="form-label">Password</label>
+                <input type="password" name="password1" id="password1" class="form-control" required>
+                {% if form.password1.errors %}
+                  <div class="text-danger small">{{ form.password1.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="password2" class="form-label">Confirm Password</label>
+                <input type="password" name="password2" id="password2" class="form-control" required>
+                {% if form.password2.errors %}
+                  <div class="text-danger small">{{ form.password2.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <button type="submit" class="btn btn-primary px-4">Register</button>
+              <a href="{% url 'login' %}">Already have an account? Login</a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

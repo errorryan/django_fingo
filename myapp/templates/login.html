@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinGo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <style>
+  /* Import Google Font */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #003366; /* Deep ocean blue */
+    color: #1abfe0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* 🌊 Ocean Wave Animation */
+  .ocean {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 25%;
+    background: #e16e1b;
+    z-index: -2;
+    overflow: hidden;
+  }
+
+  .wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: url('https://i.imgur.com/4NJl5bM.png') repeat-x;
+    background-size: 50% 100%;
+    animation: waveMove 10s linear infinite;
+    opacity: 0.6;
+  }
+
+  @keyframes waveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* 🏊‍♂️ Swimmer Animation */
+  .swimmer {
+    position: fixed;
+    bottom: 30%;
+    left: -150px;
+    width: 120px;
+    animation: swimAcross 14s linear infinite;
+    z-index: -1;
+    opacity: 0.9;
+  }
+
+
+
+  /* 💾 Login Card */
+  .card {
+    position: relative;
+    z-index: 1;
+    background-color: rgba(20, 20, 20, 0.9);
+    border: 1px solid #e7630b;
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 0 15px rgb(243, 72, 10);
+    transition: 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    box-shadow: 0 0 25px rgba(0, 180, 216, 0.8);
+  }
+
+  /* 🔤 Title */
+  .card h3 {
+    color: #00b4d8;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* 🧍 Form Inputs */
+  .form-control {
+    background-color: #111;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 15px;
+  }
+
+  .form-control:focus {
+    background-color: #111;
+    border-color: #00b4d8;
+    box-shadow: 0 0 8px rgba(0, 180, 216, 0.6);
+    color: #fff;
+  }
+
+  /* 🔘 Login Button */
+  .btn-primary {
+    background-color: #00b4d8;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-weight: 600;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: #0096c7;
+    box-shadow: 0 0 15px rgba(0, 180, 216, 0.8);
+  }
+
+  /* 🔗 Links */
+  a {
+    color: #48cae4;
+    transition: color 0.3s;
+  }
+
+  a:hover {
+    color: #90e0ef;
+  }
+
+  </style>
+
+</head>
+<body class="bg-light">
+
+  <!-- 🌊 Moving Waves Background -->
+  <div class="ocean">
+    <div class="wave"></div>
+  </div>
+
+  <!-- 🏊‍♂️ Swimmer GIF (you can replace with your own .gif or .png) -->
+  <img src="https://i.imgur.com/YmKXpGz.gif" alt="Swimmer" class="swimmer">
+
+  <!-- Login Section -->
+  <section class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg p-5" style="max-width: 400px; width:100%; border-radius: 15px;">
+      <h3 class="text-center mb-4">Login</h3>
+
+     <form method="post" action="{% url 'login' %}">
+       {% csrf_token %}
+        
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" name="username" id="username" class="form-control form-control-lg" required>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" name="password" id="password" class="form-control form-control-lg" minlength="8" required>
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary btn-lg">Login</button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <p>Don’t have an account? 
+          <a href="{% url 'register' %}" class="text-decoration-none">Register here</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

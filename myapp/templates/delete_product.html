@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Product</title>
+    <style>
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* 🌍 Body */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #003366; /* Deep ocean blue */
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 🌊 Ocean Waves */
+.ocean {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 25%;
+  background: #e16e1b;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://i.imgur.com/4NJl5bM.png') repeat-x;
+  background-size: 50% 100%;
+  animation: waveMove 10s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes waveMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 💾 Delete Card */
+.container {
+  background-color: rgba(20, 20, 20, 0.9);
+  border: 1px solid #e7630b;
+  border-radius: 12px;
+  padding: 40px 30px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 0 15px rgb(243, 72, 10);
+  z-index: 1;
+}
+
+.container:hover {
+  box-shadow: 0 0 25px rgba(0, 180, 216, 0.8);
+}
+
+/* 🔤 Title */
+.container h1 {
+  color: #00b4d8;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* ✅ Strong Text */
+.container p strong {
+  color: #ff7b00;
+  font-weight: 600;
+}
+
+/* 🔘 Buttons */
+button, .container a {
+  display: inline-block;
+  margin: 10px 5px 0 5px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+  border: none;
+}
+
+button {
+  background-color: #e63946; /* Delete - red */
+  color: #fff;
+}
+
+button:hover {
+  background-color: #d62839;
+  box-shadow: 0 0 10px rgba(230, 57, 70, 0.6);
+}
+
+.container a {
+  background-color: #00b4d8; /* Cancel - cyan */
+  color: #002244;
+}
+
+.container a:hover {
+  background-color: #0096c7;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 180, 216, 0.6);
+}
+</style>
+
+</head>
+<body>
+    <div class="ocean">
+  <div class="wave"></div>
+</div>
+
+    <div class="container">
+        <h1>Delete Product</h1>
+
+        <p>Are you sure you want to delete <strong>{{ product.productName }}</strong>?</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">Yes, Delete</button>
+            <a href="{% url 'manage_products' %}">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+<style>
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #003366; /* Deep ocean blue */
+  color: #e0f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+/* Heading */
+.container h2 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #00b4d8;
+}
+
+/* Cart Grid */
+.cart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Individual Cart Card */
+.cart-card {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #e7630b;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 180, 216, 0.5);
+}
+
+.cart-card:hover {
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.8);
+}
+
+/* Product Image */
+.cart-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Product Name */
+.cart-card h4 {
+  color: #00b4d8;
+  margin: 10px 0 5px 0;
+}
+
+/* Price */
+.cart-card p {
+  margin: 5px 0;
+}
+
+/* Quantity Input */
+.quantity-input {
+  width: 60px;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+}
+
+.quantity-input:focus {
+  border-color: #00b4d8;
+  outline: none;
+}
+
+/* Update Button */
+.update-btn {
+  padding: 5px 10px;
+  background-color: #00b4d8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.update-btn:hover {
+  background-color: #0096c7;
+}
+
+/* Remove Link */
+a.remove {
+  color: #ff4d4d;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a.remove:hover {
+  color: #ff1a1a;
+}
+
+/* Order Button */
+.cart-card form button {
+  padding: 6px 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-card form button:hover {
+  background-color: #218838;
+}
+
+/* Proceed to Checkout */
+.container > div:last-child button {
+  background-color: #00b4d8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.container > div:last-child button:hover {
+  background-color: #0096c7;
+  box-shadow: 0 0 15px rgba(0,180,216,0.5);
+}
+
+/* Empty Cart Message */
+p {
+  text-align: center;
+  color: #90e0ef;
+  font-weight: 500;
+}
+</style>
+
+</head>
+<body>
+
+  <div class="ocean">
+    <div class="wave"></div>
+  </div>
+  <div class="container">
+    <h2>Your Cart</h2>
+
+    {% if request.user.is_authenticated %}
+      {% with request.user.cart.items.all as cart_items %}
+        {% if cart_items %}
+          <div class="cart-grid">
+            {% for item in cart_items %}
+            <div class="cart-card">
+              {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.productName }}">
+              {% else %}
+                <img src="https://via.placeholder.com/150" alt="No Image">
+              {% endif %}
+              <h4>{{ item.product.productName }}</h4>
+              <p>₱{{ item.product.price }}</p>
+              <p>
+                Qty:
+                <form action="{% url 'update_cart_quantity' item.id %}" method="POST" style="display:inline-block;">
+                  {% csrf_token %}
+                   <input type="number" name="quantity" min="0.25" max="{{ product.stock }}" step="0.25" value="{{ item.quantity }}" 
+               class="quantity-input" required>
+                  <button type="submit" class="update-btn">Update</button>
+                </form>
+              </p>
+              <p>
+                <a href="{% url 'remove_cart_item' item.id %}" class="remove">Remove</a> |
+              </p>
+              
+              <p>
+  <form action="{% url 'place_order' item.product.id %}" method="POST" style="display:inline-block;">
+    {% csrf_token %}
+    <input type="hidden" name="quantity" value="{{ item.quantity }}">
+    <button type="submit" style="padding:4px 10px; background-color:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
+      Order
+    </button>
+  </form>
+</p>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="text-align:center;">Your cart is empty.</p>
+        {% endif %}
+      {% endwith %}
+    {% else %}
+      <p style="text-align:center;">Please <a href="{% url 'login' %}">login</a> to view your cart.</p>
+    {% endif %}
+
+    {% if cart_items %}
+    <div style="text-align:center; margin-top:30px;">
+      <button style="padding:10px 20px; font-size:16px;">Proceed to Checkout</button>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

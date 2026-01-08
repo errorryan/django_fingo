@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.productName }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    {% if product.image %}
+      <img src="{{ product.image.url }}" width="200">
+    {% else %}
+      <img src="{% static 'images/no-image.png' %}" width="200" alt="No image available">
+    {% endif %}
+
+    <h2>{{ product.productName }}</h2>
+    <p>{{ product.description }}</p>
+    <p><strong>Price:</strong> ₱{{ product.price }}</p>
+    <p><strong>Stock:</strong> {{ product.stock }}</p>
+    <p><strong>Posted:</strong> {{ product.created_at }}</p>
+
+    {% if user.is_authenticated %}
+        {% if product.stock > 0 %}
+            <form method="POST" action="{% url 'place_order' product.id %}">
+                {% csrf_token %}
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="{{ product.stock }}" value="1" required>
+                <button type="submit">🛒 Order Now</button>
+            </form>
+        {% else %}
+            <p style="color: red;"><strong>Out of stock</strong></p>
+        {% endif %}
+    {% else %}
+        <p>You must <a href="{% url 'login' %}">log in</a> to place an order.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'home' %}">Back to Home</a>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const orderForm = document.querySelector("form[action*='place_order']");
+      if (orderForm) {
+        orderForm.addEventListener("submit", function (event) {
+          const quantity = this.querySelector('input[name="quantity"]').value;
+          const confirmed = confirm(`Are you sure you want to order ${quantity} item(s)?`);
+          if (!confirmed) {
+            event.preventDefault();
+          }
+        });
+      }
+    });
+    </script>
+</body>
+</html>

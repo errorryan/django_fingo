@@ -1,0 +1,102 @@
+<h2>Admin Notifications</h2>
+<ul class="admin-notifications">
+    {% for notif in notifications %}
+        <li class="notif-item {% if not notif.is_read %}unread{% endif %}">
+            {% if notif.url %}
+                <a href="{{ notif.url }}">{{ notif.message }}</a>
+            {% else %}
+                {{ notif.message }}</a>
+            {% endif %}
+            <small>{{ notif.created_at|date:"M d, Y H:i" }}</small>
+        </li>
+    {% empty %}
+        <p>No notifications yet.</p>
+    {% endfor %}
+</ul>
+
+
+<style>
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #003366; /* Deep ocean blue */
+  color: #e0f7fa;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Heading */
+h2 {
+  text-align: center;
+  color: #00b4d8;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* Notifications List */
+.user-notifications {
+  list-style: none;
+  padding: 0;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual Notification */
+.user-notifications li {
+  background: rgba(20, 20, 20, 0.9);
+  border-left: 5px solid #00b4d8;
+  border-radius: 8px;
+  padding: 15px 20px;
+  box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+  transition: 0.3s;
+}
+
+.user-notifications li:hover {
+  box-shadow: 0 0 15px rgba(0, 180, 216, 0.8);
+}
+
+/* Unread Notification */
+.user-notifications li.unread {
+  border-left-color: #ff9800;
+  background-color: rgba(30, 30, 30, 0.95);
+}
+
+/* Notification Message */
+.user-notifications li a {
+  color: #90e0ef;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.user-notifications li a:hover {
+  color: #00b4d8;
+  text-decoration: underline;
+}
+
+/* Timestamp */
+.user-notifications li small {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #b2ebf2;
+}
+
+/* Empty Notifications */
+.user-notifications p {
+  text-align: center;
+  color: #90e0ef;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+/* Optional: Smooth transition for unread/read toggle */
+.user-notifications li {
+  transition: all 0.3s ease;
+}
+</style>
