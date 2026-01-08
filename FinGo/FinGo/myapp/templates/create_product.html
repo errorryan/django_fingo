@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <!-- Image Upload -->
+  <div>
+    <label for="image">Image:</label>
+    <input type="file" name="image" id="image">
+  </div>
+
+  <!-- Product Name -->
+  <div>
+    <label for="productName">Product Name:</label>
+    <input type="text" name="productName" id="productName" maxlength="255" required>
+  </div>
+
+  <!-- Description -->
+  <div>
+    <label for="description">Description:</label>
+    <textarea name="description" id="description" rows="4"></textarea>
+  </div>
+
+  <!-- Price -->
+  <div>
+    <label for="price">Price:</label>
+    <input type="number" name="price" id="price" step="0.01" required>
+  </div>
+
+  <!-- Stock -->
+  <div>
+    <label for="stock">Stock:</label>
+    <input type="number" name="stock" id="stock" required>
+  </div>
+
+  <!-- Created At -->
+  <div>
+    <label for="created_at">Created At:</label>
+    <input type="datetime-local" name="created_at" id="created_at">
+  </div>
+
+  <!-- Submit Button -->
+  <div>
+    <button type="submit">Save Product</button>
+  </div>
+</form>
+    
+</body>
+</html>
