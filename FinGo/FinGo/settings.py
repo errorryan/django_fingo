@@ -70,19 +70,35 @@ TEMPLATES = [
 WSGI_APPLICATION = 'FinGo.wsgi.application'
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'fingo_db',
+#         'USER': 'fingo_db_user',
+#         'PASSWORD': '9ibjLUHm8DKPz4AlkhpiwenkhLkjUFFE',
+#         'HOST': 'dpg-d4fu0t2dbo4c739r0e8g-a.singapore-postgres.render.com',
+#         'PORT': '5432',
+#            'OPTIONS': {
+#             'sslmode': 'require'  # <- THIS LINE IS CRUCIAL
+#         }
+#     }
+# }
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fingo_db',
-        'USER': 'fingo_db_user',
-        'PASSWORD': '9ibjLUHm8DKPz4AlkhpiwenkhLkjUFFE',
-        'HOST': 'dpg-d4fu0t2dbo4c739r0e8g-a.singapore-postgres.render.com',
-        'PORT': '5432',
-           'OPTIONS': {
-            'sslmode': 'require'  # <- THIS LINE IS CRUCIAL
+        'NAME': os.environ.get('DB_NAME', 'fingo_db'),
+        'USER': os.environ.get('DB_USER', 'fingo_db_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', '9ibjLUHm8DKPz4AlkhpiwenkhLkjUFFE'),
+        'HOST': os.environ.get('DB_HOST', 'dpg-d4fu0t2dbo4c739r0e8g-a.singapore-postgres.render.com'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+        'OPTIONS': {
+            'sslmode': 'require',
         }
     }
 }
+
 
 
 # PASSWORD VALIDATION
