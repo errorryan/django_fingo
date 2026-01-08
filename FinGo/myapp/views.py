@@ -3,11 +3,11 @@ from decimal import Decimal, InvalidOperation
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
-<<<<<<< HEAD
+
 from django.http import HttpResponseRedirect
-=======
+
 from django.http import HttpResponse, HttpResponseRedirect
->>>>>>> 8968c86cc64b58ba616da23ce3a1e381a382f258
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -24,10 +24,6 @@ from django.db.models import Sum
 from django.contrib.auth import authenticate, login
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 8968c86cc64b58ba616da23ce3a1e381a382f258
 # ✅ Utility: check if user is admin
 def is_admin(user):
     return user.is_staff or user.is_superuser

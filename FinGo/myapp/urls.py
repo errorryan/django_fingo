@@ -80,13 +80,8 @@ urlpatterns = [
     path('user_notifications/', views.user_notifications, name='user_notifications'),
     path('admin_notifications/', views.admin_notifications, name='admin_notifications'),
     path('admin/order/<int:order_id>/', views.admin_order_detail, name='admin_order_detail'),
-<<<<<<< HEAD
-=======
-    
->>>>>>> 8968c86cc64b58ba616da23ce3a1e381a382f258
-
-
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
